@@ -30,14 +30,14 @@ export default function Home() {
 
   // ////////////setInterval test////////////
 
-  const [judgeNo,setJudgeNo]=useState(3);
-  const [wordNo,setWordNo]=useState(0);
-  const [reel1,setReel1]=useState(null);
-  const [reel2,setReel2]=useState(null);
-  const [reel3,setReel3]=useState(null);
+  const [judgeNo, setJudgeNo] = useState(3);
+  const [wordNo, setWordNo] = useState(0);
+  const [reel1, setReel1] = useState(null);
+  const [reel2, setReel2] = useState(null);
+  const [reel3, setReel3] = useState(null);
 
 
-  // start共通
+  // 共通
   const start = () => {
     setWordNo(0);
     setJudgeNo(3);
@@ -63,6 +63,9 @@ export default function Home() {
     }
   }
 
+  useEffect(() => {
+    judge();
+  }, [judgeNo]);
 
   // 第1リール
   const [count1, setCount1] = useState(0);
@@ -79,8 +82,7 @@ export default function Home() {
     intervalRef1.current = null;
     console.log('止めた数字は' + count1 + 'です。');
     setReel1(count1);
-    setJudgeNo((indata)=>indata-1);
-    judge();
+    setJudgeNo((indata) => indata - 1);
   }
 
   // 第2リール
@@ -97,9 +99,8 @@ export default function Home() {
     clearInterval(intervalRef2.current);
     intervalRef2.current = null;
     console.log('止めた数字は' + count2 + 'です。');
-    setJudgeNo((indata)=>indata-1);
+    setJudgeNo((indata) => indata - 1);
     setReel2(count2);
-    judge();
   }
 
   // 第3リール
@@ -116,22 +117,21 @@ export default function Home() {
     clearInterval(intervalRef3.current);
     intervalRef3.current = null;
     console.log('止めた数字は' + count3 + 'です。');
-    setJudgeNo((indata)=>indata-1);
+    setJudgeNo((indata) => indata - 1);
     setReel3(count3);
-    judge();
   }
 
   // 判定
-  const judge=()=>{
-    if (judgeNo===1) {
+  const judge = () => {
+    if (judgeNo === 1) {
       console.log('judge1');
-      if((reel1===reel2 || reel1===reel3 || reel2===reel3)){
+      if ((reel1 === reel2 || reel1 === reel3 || reel2 === reel3)) {
         setWordNo(1);
       }
     }
-    if (judgeNo===0){
+    if (judgeNo === 0) {
       console.log('judge0');
-      if(reel1===reel2 && reel2===reel3){
+      if (reel1 === reel2 && reel2 === reel3) {
         setWordNo(2);
       }
     }
@@ -149,7 +149,7 @@ export default function Home() {
 
       {/* <h1>FightingApp</h1> */}
       {/* <h2>ポジティブワードを入力</h2> */}
-      <input ref={ref} type="text" />
+      {/* <input ref={ref} type="text" /> */}
       {/* <button onClick={dataPusher}>登録ボタン</button> */}
       {/* <button onClick={dataGetter}>読込ボタン</button> */}
       {getData.map((data, index) => (
@@ -158,17 +158,34 @@ export default function Home() {
         </div>
       ))}
       <div>
-        <p>{count1}{count2}{count3}</p>
-        <button onClick={start}>START</button>
+        <div className={styles.reel_div}>
+          <div className={styles.reelContainer}>
+            <p className={styles.reel_p}>
+              {count1}
+              <button className={styles.reel_button} onClick={stop1}>STOP</button>
+            </p>
+          </div>
+          <div className={styles.reelContainer}>
+            <p className={styles.reel_p}>
+              {count2}
+              <button className={styles.reel_button} onClick={stop2}>STOP</button>
+            </p>
+          </div>
+          <div className={styles.reelContainer}>
+            <p className={styles.reel_p}>
+              {count3}
+              <button className={styles.reel_button} onClick={stop3}>STOP</button>
+            </p>
+          </div>
+        </div>
         <br />
-        <button onClick={stop1}>STOP</button>
-        <button onClick={stop2}>STOP</button>
-        <button onClick={stop3}>STOP</button>
+        <button className={styles.startButton} onClick={start}>START</button>
       </div>
-      {wordNo===0 && <p>no event</p>}
-      {wordNo===1 && <p>reach</p>}
-      {wordNo===2 && <p>congratulation!!</p>}
-      <p>judgeNo-{judgeNo}</p>
+      <div className={styles.event}>
+      {wordNo === 0 && <p className={styles.noevent} >no event</p>}
+      {wordNo === 1 && <p className={styles.reach} >reach</p>}
+      {wordNo === 2 && <p className={styles.congratulation} >congratulation!!</p>}
+      </div>
     </div>
   )
 }
